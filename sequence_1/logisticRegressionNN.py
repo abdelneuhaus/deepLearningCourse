@@ -256,16 +256,15 @@ def predict(w, b, X):
     w = w.reshape(X.shape[0], 1)
     
     # Compute vector "A" predicting the probabilities of a cat being present in the picture
-    ### START CODE HERE ### (≈ 1 line of code)
-    A = None
-    ### END CODE HERE ###
+    A = sigmoid(np.dot(w.T, X) + b)
     
     for i in range(A.shape[1]):
-        
         # Convert probabilities A[0,i] to actual predictions p[0,i]
-        ### START CODE HERE ### (≈ 4 lines of code)
-        pass
-        ### END CODE HERE ###
+        if A[0,i] >= 0.5:
+            Y_prediction[0,i] = 1
+        else:
+            Y_prediction[0,i] = 0
+        # Y_prediction[0, i] = 1 if A[0, i] > 0.5 else 0        # works also
     
     assert(Y_prediction.shape == (1, m))
     
@@ -273,11 +272,79 @@ def predict(w, b, X):
 
 
 # Test the function
-# w = np.array([[0.1124579],[0.23106775]])
-# b = -0.3
-# X = np.array([[1.,-1.1,-3.2],[1.2,2.,0.1]])
-# print ("predictions = " + str(predict(w, b, X)))
-# print("")
+w = np.array([[0.1124579],[0.23106775]])
+b = -0.3
+X = np.array([[1.,-1.1,-3.2],[1.2,2.,0.1]])
+print ("predictions = " + str(predict(w, b, X)))
+print("")
+
+
+
+### MERGE ALL FUNCTIONS INTO A MODEL ###
+
+def model(X_train, Y_train, X_test, Y_test, num_iterations = 2000, learning_rate = 0.5, print_cost = False):
+    """
+    Builds the logistic regression model by calling the function you've implemented previously
+    
+    Arguments:
+    X_train -- training set represented by a numpy array of shape (num_px * num_px * 3, m_train)
+    Y_train -- training labels represented by a numpy array (vector) of shape (1, m_train)
+    X_test -- test set represented by a numpy array of shape (num_px * num_px * 3, m_test)
+    Y_test -- test labels represented by a numpy array (vector) of shape (1, m_test)
+    num_iterations -- hyperparameter representing the number of iterations to optimize the parameters
+    learning_rate -- hyperparameter representing the learning rate used in the update rule of optimize()
+    print_cost -- Set to true to print the cost every 100 iterations
+    
+    Returns:
+    d -- dictionary containing information about the model.
+    """
+    
+    w, b = initialize_with_zeros(X_train.shape[0])
+    parameters, grads, costs = optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost)
+    
+    # Retrieve parameters w and b from dictionary "parameters"
+    w = parameters["w"]
+    b = parameters["b"]
+    
+    # Predict test/train set examples (≈ 2 lines of code)
+    Y_prediction_test = predict(w, b, X_test)
+    Y_prediction_train = predict(w, b, X_train)
+
+    # Print train/test errors
+    print("train accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_train - Y_train)) * 100))
+    print("test accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_test - Y_test)) * 100))
+
+    
+    d = {"costs": costs,
+         "Y_prediction_test": Y_prediction_test, 
+         "Y_prediction_train" : Y_prediction_train, 
+         "w" : w, 
+         "b" : b,
+         "learning_rate" : learning_rate,
+         "num_iterations": num_iterations}
+    
+    return d
+
+
+# Test the function
+# Run the model
+d = model(trainSetX, trainSetY, testSetX, testSetY, num_iterations = 2000, learning_rate = 0.005, print_cost = True)
+
+# Test on the image 5
+index = 5
+plt.imshow(testSetX[:,index].reshape((num_px, num_px, 3)))
+print ("y = " + str(testSetY[0, index]))
+# We get y = 0, it's a cat, but in reality it's a butterfly. The model is overfitting
+
+
+# Plot learning curve (with costs)
+costs = np.squeeze(d['costs'])
+plt.plot(costs)
+plt.ylabel('cost')
+plt.xlabel('iterations (per hundreds)')
+plt.title("Learning rate =" + str(d["learning_rate"]))
+plt.show()
+
 
 ### Show the cat image from the beginning
 plt.show()
