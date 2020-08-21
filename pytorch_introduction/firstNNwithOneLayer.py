@@ -11,7 +11,7 @@ y = torch.Tensor([[1],[1],[0],[1],[0],[1],[1],[0],[0]])
 
 
 ### INITIALIZATION OF PARAMETERS AND HYPERPARAMETERS ###
-numberEpoch = 100
+numberEpoch = 400
 learningRate = 1e-2
 inputDim = x.shape[1]
 hiddenDim = x.shape[0] 
