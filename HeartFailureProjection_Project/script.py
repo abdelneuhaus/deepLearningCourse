@@ -42,7 +42,7 @@ sns.heatmap(correlation, annot=True)
 
 # Checking of extrem values with a box plot and removal if there are any
 sns.boxplot(x=dataset.ejection_fraction)
-# plt.show()
+plt.show()
 # There is two values for ejection_fraction that we remove because very large and out of the plot
 dataset = dataset[dataset['ejection_fraction']<70]  # keeping only values inferior to 70 (the two values are > to 70)
 # we do the same with the other features : nothing to remove (changing the x above)
