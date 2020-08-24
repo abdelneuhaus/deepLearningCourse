@@ -41,7 +41,7 @@ sns.heatmap(correlation, annot=True)
 
 
 # Checking of extrem values with a box plot and removal if there are any
-sns.boxplot(x=dataset.ejection_fraction)
+sns.boxplot(x=dataset.ejection_fraction)    # comment the heatmap to avoid display bugs
 plt.show()
 # There is two values for ejection_fraction that we remove because very large and out of the plot
 dataset = dataset[dataset['ejection_fraction']<70]  # keeping only values inferior to 70 (the two values are > to 70)
@@ -101,5 +101,5 @@ predictionsKNN = knn.predict(X_test)
 accKNN = accuracy_score(y_test, predictionsKNN)
 print(round(accKNN*100, 3), "%")
 """
-We get a maximum accuracy of 92,982% with LR and a test set percentage of 0,21 regarding the whole dataset and using k=5 neighbors
+We get a maximum accuracy of 96,825% with LR and a test set percentage of 0,21 regarding the whole dataset and using k=5 neighbors
 """
