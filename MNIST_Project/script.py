@@ -63,11 +63,11 @@ normalizedX_test = scaler.transform(X_test)
 
 
 
-#################################
-#                               #
-#      BUILDING OF THE ANN      #
-#                               #
-#################################
+##############################
+#                            #
+#      BUILDING THE ANN      #
+#                            #
+##############################
 X_train = torch.from_numpy(X_train)
 X_test = torch.from_numpy(X_test)
 y_train = torch.from_numpy(y_train)
